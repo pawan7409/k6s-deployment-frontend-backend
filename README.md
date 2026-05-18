@@ -595,5 +595,3 @@ For issues or questions:
 
 **Last Updated:** 2024
 **Version:** 1.0.0
-# k6s-deployment-frontend-backend
-A production-ready project deploying Angular frontend and Python backend applications on Kubernetes with Azure integration, CI/CD using GitHub Actions, and comprehensive monitoring.

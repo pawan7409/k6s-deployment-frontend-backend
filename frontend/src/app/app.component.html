@@ -1,0 +1,77 @@
+<div class="header">
+  <div class="container-main">
+    <h1>{{ title }}</h1>
+    <p class="mb-0">Deployed on Kubernetes with Azure Integration</p>
+  </div>
+</div>
+
+<div class="container-main">
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card card-custom">
+        <div class="card-body">
+          <h5 class="card-title">Frontend Status</h5>
+          <p class="card-text">
+            <span class="status-badge status-online">✓ Online</span>
+          </p>
+          <p class="text-muted">Angular Application Running</p>
+          <p class="small">
+            <strong>Version:</strong> 1.0.0<br>
+            <strong>Environment:</strong> Production<br>
+            <strong>Platform:</strong> Kubernetes
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card card-custom">
+        <div class="card-body">
+          <h5 class="card-title">Backend Connection</h5>
+          <div *ngIf="loading" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div *ngIf="error && !loading" class="alert alert-danger mb-0">
+            {{ error }}
+          </div>
+          <div *ngIf="backendData && !loading" class="alert alert-success mb-0">
+            <strong>✓ Connected to Backend</strong><br>
+            {{ backendData.message }}
+          </div>
+          <button *ngIf="!loading" (click)="fetchData()" class="btn btn-primary btn-custom mt-3">
+            Refresh Connection
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card card-custom">
+        <div class="card-body">
+          <h5 class="card-title">Architecture Overview</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong>Frontend:</strong> Angular 17 - Kubernetes Pod
+            </li>
+            <li class="list-group-item">
+              <strong>Backend:</strong> Python Flask/FastAPI - Kubernetes Pod
+            </li>
+            <li class="list-group-item">
+              <strong>Cloud Services:</strong> Azure App Service, Function App
+            </li>
+            <li class="list-group-item">
+              <strong>CI/CD:</strong> GitHub Actions - Auto Build & Deploy
+            </li>
+            <li class="list-group-item">
+              <strong>Orchestration:</strong> Kubernetes with Helm (optional)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

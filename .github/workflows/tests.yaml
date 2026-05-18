@@ -1,0 +1,76 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run linter
+        run: |
+          cd frontend
+          npm run lint || true
+
+      - name: Build Angular app
+        run: |
+          cd frontend
+          npm run build:prod
+
+  test-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pylint
+
+      - name: Run linter
+        run: |
+          cd backend
+          pylint app.py config.py azure_integration.py || true
+
+      - name: Run tests
+        run: |
+          cd backend
+          pytest --cov=. --cov-report=xml || true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./backend/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
