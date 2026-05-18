@@ -1,0 +1,68 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'kubernetes/**'
+      - '.github/workflows/k8s-deploy.yaml'
+  workflow_run:
+    workflows: ["Build and Push Docker Images"]
+    types:
+      - completed
+
+env:
+  REGISTRY: myregistry.azurecr.io
+  KUBE_NAMESPACE: default
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'push'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.27.0'
+
+      - name: Connect to AKS cluster
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+          admin: 'false'
+
+      - name: Update deployment images
+        run: |
+          kubectl set image deployment/angular-frontend angular-frontend=${{ env.REGISTRY }}/angular-frontend:${{ github.sha }} --namespace=${{ env.KUBE_NAMESPACE }} || true
+          kubectl set image deployment/python-backend python-backend=${{ env.REGISTRY }}/python-backend:${{ github.sha }} --namespace=${{ env.KUBE_NAMESPACE }} || true
+
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f kubernetes/01-frontend-deployment.yaml
+          kubectl apply -f kubernetes/02-backend-deployment.yaml
+          kubectl apply -f kubernetes/03-configmap-secrets.yaml
+          kubectl apply -f kubernetes/04-ingress.yaml
+          kubectl apply -f kubernetes/05-policies-hpa.yaml
+
+      - name: Verify deployments
+        run: |
+          kubectl rollout status deployment/angular-frontend --namespace=${{ env.KUBE_NAMESPACE }} --timeout=5m
+          kubectl rollout status deployment/python-backend --namespace=${{ env.KUBE_NAMESPACE }} --timeout=5m
+
+      - name: Get service status
+        run: |
+          kubectl get services --namespace=${{ env.KUBE_NAMESPACE }}
+          kubectl get deployments --namespace=${{ env.KUBE_NAMESPACE }}
+          kubectl get pods --namespace=${{ env.KUBE_NAMESPACE }}
+
+      - name: Print logs
+        if: failure()
+        run: |
+          kubectl logs -l app=angular-frontend --namespace=${{ env.KUBE_NAMESPACE }} --tail=50
+          kubectl logs -l app=python-backend --namespace=${{ env.KUBE_NAMESPACE }} --tail=50
