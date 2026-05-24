@@ -7,7 +7,7 @@ on:
       - features/k8sdeployment
     paths:
       - 'azure/**'
-
+  workflow_dispatch:
 # ✅ REQUIRED FIX (for azure/login)
 permissions:
   id-token: write
