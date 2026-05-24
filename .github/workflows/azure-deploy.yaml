@@ -7,7 +7,6 @@ on:
       - features/k8sdeployment
     paths:
       - 'azure/**'
-      - '.github/workflows/azure-deploy.yaml'
 
 # ✅ REQUIRED FIX (for azure/login)
 permissions:
