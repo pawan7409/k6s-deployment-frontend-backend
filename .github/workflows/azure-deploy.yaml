@@ -4,9 +4,14 @@ on:
   push:
     branches:
       - main
+      - features/k8sdeployment
     paths:
       - 'azure/**'
-      - '.github/workflows/azure-deploy.yaml'
+  workflow_dispatch:
+# ✅ REQUIRED FIX (for azure/login)
+permissions:
+  id-token: write
+  contents: read
 
 env:
   REGISTRY: myregistry.azurecr.io
@@ -24,6 +29,7 @@ jobs:
         with:
           terraform_version: 1.5.0
 
+      # ✅ FIXED LOGIN (only creds, removed client-id etc.)
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -72,6 +78,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ✅ FIXED LOGIN
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -96,6 +103,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ✅ FIXED LOGIN
       - name: Azure Login
         uses: azure/login@v1
         with:
