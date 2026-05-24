@@ -164,3 +164,160 @@ output "pcam_network_info" {
   description = "Complete PCAM network information"
   value       = module.pcam_networking.pcam_network_info
 }
+
+# Monitoring Outputs
+output "log_analytics_workspace_id" {
+  description = "The ID of the Log Analytics Workspace"
+  value       = module.monitoring.log_analytics_workspace_id
+}
+
+output "log_analytics_workspace_name" {
+  description = "The name of the Log Analytics Workspace"
+  value       = module.monitoring.log_analytics_workspace_name
+}
+
+output "app_insights_id" {
+  description = "The ID of Application Insights"
+  value       = module.monitoring.app_insights_id
+}
+
+output "app_insights_instrumentation_key" {
+  description = "The instrumentation key for Application Insights"
+  value       = module.monitoring.app_insights_instrumentation_key
+  sensitive   = true
+}
+
+output "app_insights_connection_string" {
+  description = "The connection string for Application Insights"
+  value       = module.monitoring.app_insights_connection_string
+  sensitive   = true
+}
+
+# Key Vault Outputs
+output "key_vault_id" {
+  description = "The ID of the Key Vault"
+  value       = module.key_vault.key_vault_id
+}
+
+output "key_vault_name" {
+  description = "The name of the Key Vault"
+  value       = module.key_vault.key_vault_name
+}
+
+output "key_vault_uri" {
+  description = "The URI of the Key Vault"
+  value       = module.key_vault.key_vault_uri
+}
+
+# Container Registry Outputs
+output "container_registry_id" {
+  description = "The ID of the Container Registry"
+  value       = module.container_registry.registry_id
+}
+
+output "container_registry_name" {
+  description = "The name of the Container Registry"
+  value       = module.container_registry.registry_name
+}
+
+output "container_registry_login_server" {
+  description = "The login server for the Container Registry"
+  value       = module.container_registry.registry_login_server
+}
+
+output "acr_admin_username" {
+  description = "Admin username for Container Registry"
+  value       = module.container_registry.admin_username
+  sensitive   = true
+}
+
+output "acr_admin_password" {
+  description = "Admin password for Container Registry"
+  value       = module.container_registry.admin_password
+  sensitive   = true
+}
+
+# AKS Outputs
+output "aks_cluster_id" {
+  description = "The ID of the AKS cluster"
+  value       = module.aks.cluster_id
+}
+
+output "aks_cluster_name" {
+  description = "The name of the AKS cluster"
+  value       = module.aks.cluster_name
+}
+
+output "aks_fqdn" {
+  description = "The FQDN of the AKS cluster"
+  value       = module.aks.fqdn
+}
+
+output "aks_kube_config" {
+  description = "Kubernetes config"
+  value       = module.aks.kube_config
+  sensitive   = true
+}
+
+output "aks_kube_config_raw" {
+  description = "Raw Kubernetes config"
+  value       = module.aks.kube_config_raw
+  sensitive   = true
+}
+
+output "aks_api_server_address" {
+  description = "AKS API server address"
+  value       = module.aks.api_server_address
+}
+
+output "aks_node_resource_group" {
+  description = "The node resource group for AKS"
+  value       = module.aks.node_resource_group
+}
+
+# App Service Outputs
+output "app_service_plan_id" {
+  description = "The ID of the App Service Plan"
+  value       = module.app_service.app_service_plan_id
+}
+
+output "backend_app_id" {
+  description = "The ID of the backend App Service"
+  value       = module.app_service.backend_app_id
+}
+
+output "backend_app_hostname" {
+  description = "The default hostname of the backend App Service"
+  value       = module.app_service.backend_app_default_hostname
+}
+
+output "frontend_app_id" {
+  description = "The ID of the frontend App Service"
+  value       = module.app_service.frontend_app_id
+}
+
+output "frontend_app_hostname" {
+  description = "The default hostname of the frontend App Service"
+  value       = module.app_service.frontend_app_default_hostname
+}
+
+# Function App Outputs
+output "function_app_id" {
+  description = "The ID of the Function App"
+  value       = module.function_app.function_app_id
+}
+
+output "function_app_name" {
+  description = "The name of the Function App"
+  value       = module.function_app.function_app_name
+}
+
+output "function_app_hostname" {
+  description = "The default hostname of the Function App"
+  value       = module.function_app.function_app_default_hostname
+}
+
+output "function_app_identity_principal_id" {
+  description = "The principal ID of the Function App managed identity"
+  value       = module.function_app.function_app_identity_principal_id
+}

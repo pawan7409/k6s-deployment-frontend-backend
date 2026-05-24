@@ -1,3 +1,18 @@
+# ============================================================================
+# DEPRECATED: Legacy Azure Terraform Configuration
+# ============================================================================
+# These resources have been migrated to modular Terraform code.
+# See: terraform/environments/dev/main.tf and terraform/modules/
+#
+# This file is kept for reference only. Do NOT use these resources.
+# The Terraform provider and resource types in this file are outdated.
+# ============================================================================
+
+# NOTE: All resource definitions below are commented out or deprecated.
+# Use the terraform/modules/ and terraform/environments/ directories instead.
+
+/*
+
 terraform {
   required_version = ">= 1.0"
   required_providers {
