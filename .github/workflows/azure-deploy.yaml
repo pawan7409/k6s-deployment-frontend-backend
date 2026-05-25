@@ -1,4 +1,21 @@
 name: Deploy to Azure Services
+# 
+# ========================================
+# REQUIRED GITHUB SECRETS (Repository Settings)
+# ========================================
+# AZURE_CLIENT_ID           - Azure Service Principal Client ID
+# AZURE_TENANT_ID           - Azure Tenant ID  
+# AZURE_SUBSCRIPTION_ID     - Azure Subscription ID
+# 
+# TF_STATE_STORAGE          - Terraform state storage account name
+# AZURE_RESOURCE_GROUP      - Azure Resource Group name
+# AZURE_LOCATION            - Azure region (e.g., eastus)
+# BACKEND_APP_SERVICE_NAME  - App Service name for backend
+# FRONTEND_APP_SERVICE_NAME - App Service name for frontend
+# FUNCTION_APP_NAME         - Function App name
+#
+# MANUAL TRIGGER: Go to Actions tab, select this workflow, click "Run workflow"
+# ========================================
 
 on:
   push:
@@ -8,7 +25,22 @@ on:
     paths:
       - 'azure/**'
   workflow_dispatch:
-# ✅ REQUIRED FIX (for azure/login)
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: false
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+          - development
+      apply_terraform:
+        description: 'Apply Terraform changes'
+        required: false
+        default: false
+        type: boolean
+
 permissions:
   id-token: write
   contents: read
@@ -29,11 +61,18 @@ jobs:
         with:
           terraform_version: 1.5.0
 
-      # ✅ FIXED LOGIN (only creds, removed client-id etc.)
+      # ✅ Azure Login using SERVICE_PRINCIPAL
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          auth-type: SERVICE_PRINCIPAL
+          enable-AzPSSession: false
+          environment: azurecloud
+          allow-no-subscriptions: false
+          audience: api://AzureADTokenExchange
 
       - name: Terraform Init
         run: |
@@ -78,11 +117,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ✅ FIXED LOGIN
+      # ✅ Azure Login using SERVICE_PRINCIPAL
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          auth-type: SERVICE_PRINCIPAL
+          enable-AzPSSession: false
+          environment: azurecloud
+          allow-no-subscriptions: false
+          audience: api://AzureADTokenExchange
 
       - name: Deploy Backend to App Service
         uses: azure/webapps-deploy@v2
@@ -103,11 +149,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ✅ FIXED LOGIN
+      # ✅ Azure Login using SERVICE_PRINCIPAL
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          auth-type: SERVICE_PRINCIPAL
+          enable-AzPSSession: false
+          environment: azurecloud
+          allow-no-subscriptions: false
+          audience: api://AzureADTokenExchange
 
       - name: Set up Python
         uses: actions/setup-python@v4
