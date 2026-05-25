@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - features/k8sdeployment
   pull_request:
     branches:
       - main
