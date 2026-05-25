@@ -118,6 +118,19 @@ app_service_sku                 = "B2"
 deploy_backend_app_service      = false
 backend_app_service_name        = "app-dev-backend-k8s"
 deploy_frontend_app_service     = false
+
+# ========================================
+# Backend Storage Account Configuration
+# ========================================
+backend_storage_rg_name         = "rg-backend-storage-dev"
+backend_storage_account_name    = "stbackenddev"
+backend_storage_replication_type = "LRS"
+backend_container_name          = "backend-data"
+enable_backend_storage          = true
+
+# Note: Storage account names must be globally unique and 3-24 characters
+# Only lowercase letters and numbers allowed
+# If stbackenddev conflicts, change to: stbackend${environment}${random}
 frontend_app_service_name       = "app-dev-frontend-k8s"
 app_service_enable_autoscaling  = true
 app_service_default_capacity    = 2

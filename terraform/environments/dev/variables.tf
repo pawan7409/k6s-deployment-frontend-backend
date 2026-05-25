@@ -424,6 +424,39 @@ variable "backend_app_service_name" {
   default     = "app-k8s-backend"
 }
 
+# ========================================
+# Backend Storage Account Variables
+# ========================================
+variable "backend_storage_rg_name" {
+  type        = string
+  description = "Name of the resource group for backend storage"
+  default     = "rg-backend-storage-dev"
+}
+
+variable "backend_storage_account_name" {
+  type        = string
+  description = "Name of the storage account for backend services"
+  default     = "stbackenddev"
+}
+
+variable "backend_storage_replication_type" {
+  type        = string
+  description = "Replication type for backend storage account"
+  default     = "LRS"
+}
+
+variable "backend_container_name" {
+  type        = string
+  description = "Name of the main container in backend storage account"
+  default     = "backend-data"
+}
+
+variable "enable_backend_storage" {
+  type        = bool
+  description = "Enable creation of backend storage account"
+  default     = true
+}
+
 variable "backend_app_settings" {
   type        = map(string)
   description = "App settings for backend"
